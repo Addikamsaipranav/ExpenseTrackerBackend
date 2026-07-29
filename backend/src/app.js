@@ -14,12 +14,32 @@ const app = express();
 
 // Middleware
 const corsOptions = {
-  origin: [
-    "http://localhost:8081",
-    "http://localhost:19006",
-    "http://localhost:3000",
-    "https://expensetrackerbackend-1-t8si.onrender.com"
-  ],
+
+  origin: function (origin, callback) {
+
+    // Allow requests without origin (Postman, curl, mobile apps)
+    if (!origin) {
+      return callback(null, true);
+    }
+
+
+    // Allow all localhost ports (Expo web)
+    if (origin.startsWith("http://localhost")) {
+      return callback(null, true);
+    }
+
+
+    // Allow deployed frontend later
+    if (origin.startsWith("https://")) {
+      return callback(null, true);
+    }
+
+
+    callback(new Error("Not allowed by CORS"));
+
+  },
+
+
   methods: [
     "GET",
     "POST",
@@ -27,11 +47,16 @@ const corsOptions = {
     "DELETE",
     "OPTIONS"
   ],
+
+
   allowedHeaders: [
     "Content-Type",
     "Authorization"
   ],
+
+
   credentials: true
+
 };
 
 
