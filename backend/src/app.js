@@ -13,7 +13,29 @@ const dashboardRoutes = require("./routes/dashboard.routes");
 const app = express();
 
 // Middleware
-app.use(cors());
+const corsOptions = {
+  origin: [
+    "http://localhost:8081",
+    "http://localhost:19006",
+    "http://localhost:3000",
+    "https://expensetrackerbackend-1-t8si.onrender.com"
+  ],
+  methods: [
+    "GET",
+    "POST",
+    "PUT",
+    "DELETE",
+    "OPTIONS"
+  ],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization"
+  ],
+  credentials: true
+};
+
+
+app.use(cors(corsOptions));
 app.use(helmet());
 app.use(morgan("dev"));
 app.use(express.json());
